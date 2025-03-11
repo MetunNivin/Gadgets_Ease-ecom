@@ -40,11 +40,11 @@ npm run dev
 
 **🔧Technical Highlights:**
 
-🔹 MVC Architecture - Ensuring modularity and maintainability.
-🔹 Express.js & Node.js - Rapid server-side development.
-🔹 MongoDB - Efficient data storage and retrieval.
-🔹 Multer - File uploads made easy.
-🔹 Socket.io - Real-time chat for instant communication.
-🔹 Twilio API - SMS notifications to keep users engaged.
-🔹 Mailgen & Nodemailer - Email notifications for better communication.
-🔹 PayPal Integration - Secure online payments.
+🔹 MVC Architecture - Ensuring modularity and maintainability.  
+🔹 Express.js & Node.js - Rapid server-side development.  
+🔹 MongoDB - Efficient data storage and retrieval.  
+🔹 Multer - File uploads made easy.  
+🔹 Socket.io - Real-time chat for instant communication.  
+🔹 Twilio API - SMS notifications to keep users engaged.  
+🔹 Mailgen & Nodemailer - Email notifications for better communication.  
+🔹 PayPal Integration - Secure online payments.  
