@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <!-- Add Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Add New Product</h1>
+        <form action="/admin/addproduct" method="post" enctype="multipart/form-data">
+            <!-- Product Details -->
+            <div class="form-group">
+                <label for="name">Product Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select class="form-control" id="category" name="category" required>
+                    <% categorys.forEach(category => { %>
+                        <option value="<%= category.category %>"><%= category.category %></option>
+                    <% }); %>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" class="form-control" id="price" name="price" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="discountPrice">Discount Price:</label>
+                <input type="number" class="form-control" id="discountPrice" name="discountPrice" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="productColor">Product Color:</label>
+                <input type="text" class="form-control" id="productColor" name="productColor" required>
+            </div>
+            
+            <!-- Product Images -->
+            <div class="form-group">
+                <label for="selectedImages">Selected Images:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="selectedImages" name="productImages" accept="image/*" multiple required>
+                    <label class="custom-file-label" for="selectedImages">Choose images...</label>
+                </div>
+                <div id="image-preview-container">
+                    <img id="image-preview" src="" alt="Preview" class="img-fluid">
+                </div>
+                <input type="hidden" class="cropped-image" name="croppedImages[]" value="">
+                <input type="hidden" class="cropped-image" name="croppedImages[]" value="">
+
+                <!-- Add this hidden input to store the cropped image data -->
+                <input type="hidden" id="cropped-image" name="croppedImage">
+            </div>
+            <!-- Product Video -->
+            <div class="form-group">
+                <label for="selectedVideo">Selected Video:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="selectedVideo" name="video" accept="video/*">
+                    <label class="custom-file-label" for="selectedVideo">Choose video...</label>
+                </div>
+                <div id="video-preview" class="mt-2"></div>
+            </div>
+            
+            <!-- Product Details -->
+            <h2>Product Details</h2>
+            <div class="form-group">
+                <label for="ram">RAM:</label>
+                <input type="text" class="form-control" id="ram" name="ram" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="rom">ROM:</label>
+                <input type="text" class="form-control" id="rom" name="rom" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="expandable">Expandable Memory:</label>
+                <input type="text" class="form-control" id="expandable" name="expandable" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="frontCam">Front Camera:</label>
+                <input type="text" class="form-control" id="frontCam" name="frontCam" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="rearCam">Rear Camera:</label>
+                <input type="text" class="form-control" id="rearCam" name="rearCam" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="processor">Processor:</label>
+                <input type="text" class="form-control" id="processor" name="processor" required>
+            </div>
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Add Product</button>
+        </form>
+    </div>
+    
+    <!-- Add Bootstrap JS and jQuery here -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Function to handle image file input change event
+        document.getElementById('selectedImages').addEventListener('change', function(e) {
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const files = e.target.files;
+
+        // Clear previous previews and cropped images
+        imagePreviewContainer.innerHTML = '';
+        document.querySelectorAll('.cropped-image').forEach(function(input) {
+            input.value = '';
+        });
+
+        // Loop through selected files and create Cropper.js instances
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'mb-2';
+
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.style.maxWidth = '100px'; // Adjust the size as needed
+
+            const cropper = new Cropper(img, {
+                aspectRatio: 1, // You can specify the aspect ratio as needed
+                viewMode: 1,    // Set the initial view mode (e.g., 0, 1, 2, 3)
+                crop: function(event) {
+                    const croppedCanvas = cropper.getCroppedCanvas();
+                    const croppedImageData = croppedCanvas.toDataURL('image/jpeg'); // Adjust the format as needed
+
+                    // Create a hidden input for each cropped image
+                    const croppedImageInput = document.createElement('input');
+                    croppedImageInput.type = 'hidden';
+                    croppedImageInput.className = 'cropped-image';
+                    croppedImageInput.name = 'croppedImages[]';
+                    croppedImageInput.value = croppedImageData;
+
+                    // Append the cropped image input to the form
+                    document.getElementById('image-preview-container').appendChild(croppedImageInput);
+                }
+            });
+
+            imgContainer.appendChild(img);
+            imagePreviewContainer.appendChild(imgContainer);
+        }
+    });
+        // Function to handle video file input change event
+        document.getElementById('selectedVideo').addEventListener('change', function(e) {
+            const videoPreview = document.getElementById('video-preview');
+            videoPreview.innerHTML = ''; // Clear previous previews
+    
+            const file = e.target.files[0];
+            const videoContainer = document.createElement('div');
+            videoContainer.className = 'mb-2';
+    
+            const video = document.createElement('video');
+            video.src = URL.createObjectURL(file);
+            video.controls = true;
+            video.style.maxWidth = '100%'; // Adjust the size as needed
+    
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'btn btn-danger btn-sm ml-2';
+            removeBtn.textContent = 'Remove';
+            
+            // Handle remove button click event
+            removeBtn.addEventListener('click', function() {
+                videoContainer.remove(); // Remove the video container
+            });
+    
+            videoContainer.appendChild(video);
+            videoContainer.appendChild(removeBtn);
+            videoPreview.appendChild(videoContainer);
+        });
+    </script>
+</body>
+</html>

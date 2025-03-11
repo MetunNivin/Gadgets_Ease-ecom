@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Electro - HTML Ecommerce Template</title>
+
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+		<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"/>
+
+		<link type="text/css" rel="stylesheet" href="/css/slick.css"/>
+		<link type="text/css" rel="stylesheet" href="/css/slick-theme.css"/>
+
+		<link type="text/css" rel="stylesheet" href="/css/nouislider.min.css"/>
+
+		<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+		<link type="text/css" rel="stylesheet" href="/css/style.css"/>
+    </head>
+	<body>
+		<% if (user) { %>
+        		<!-- NEWSLETTER -->
+		<div id="newsletter" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<% } %>		
+		<!-- /NEWSLETTER -->
+
+		<!-- FOOTER -->
+		<footer id="footer">
+			<!-- top footer -->
+			<div class="section">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">About Us</h3>
+								<p>GadgetEase - Your Trusted Source for Smartphones</p>
+								<ul class="footer-links">
+									<li><a href="#"><i class="fa fa-map-marker"></i>682301 Maradu</a></li>
+									<li><a href="#"><i class="fa fa-phone"></i>+91 7025552608</a></li>
+									<li><a href="#"><i class="fa fa-envelope-o"></i>gadgetease.info@gmail.com</a></li>
+								</ul>
+							</div>
+						</div>
+						<% if (user) { %>
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Categories</h3>
+								<ul class="footer-links">
+									<% categoryPo.forEach(category => { %>
+									<li><a href="/store/<%= category.category %>"><%= category.category %></a></li>
+									<% }); %>
+								</ul>
+							</div>
+						</div>
+
+						<div class="clearfix visible-xs"></div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Information</h3>
+								<ul class="footer-links">
+									<li><a href="#">About Us</a></li>
+									<li><a href="#">Contact Us</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+									<li><a href="/viewOrders/<%= user._id %>">Orders and Returns</a></li>
+									<li><a href="#">Terms & Conditions</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Service</h3>
+								<ul class="footer-links">
+									<li><a href="/profile/<%= user._id %> ">My Account</a></li>
+									<li><a href="/cart">View Cart</a></li>
+									<li><a href="/wallet/<%= user._id %>">Wallet</a></li>
+									<li><a href="/viewOrders/<%= user._id %>">Track My Order</a></li>
+									<li><a href="/support">Help</a></li>
+								</ul>
+							</div>
+						</div>
+						<% } %>		
+					</div>
+					<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /top footer -->
+
+			<!-- bottom footer -->
+			<div id="bottom-footer" class="section">
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<ul class="footer-payments">
+								<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
+								<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
+							</ul>
+							<span class="copyright">
+								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+								Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This website is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://github.com/aswanth6000" target="_blank">Aswanth Alakkadan</a>
+							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+							</span>
+						</div>
+					</div>
+						<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /bottom footer -->
+		</footer>
+		<!-- /FOOTER -->
+        <script src="/js/jquery.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/slick.min.js"></script>
+		<script src="/js/nouislider.min.js"></script>
+		<script src="/js/jquery.zoom.min.js"></script>
+		<script src="/js/main.js"></script>
+        </body>
+        </html>

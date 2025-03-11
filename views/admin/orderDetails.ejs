@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Order Details</h1>
+
+        <!-- Display order details -->
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Order Information:</h4>
+                <p><strong>Order Date:</strong> <%= orders.orderDate.toDateString() %></p>
+                <p><strong>Payment Method:</strong> <%= orders.paymentMethod %></p>
+                <!-- Add more order details as needed -->
+            </div>
+            <div class="col-md-6">
+                <h4>Shipping Address:</h4>
+                <p><strong>Name:</strong> <%= orders.address.name %></p>
+                <p><strong>Phone:</strong> <%= orders.address.phone %></p>
+                <p><strong>House Name:</strong> <%= orders.address.houseName %></p>
+                <p><strong>Street:</strong> <%= orders.address.street %></p>
+                <p><strong>City:</strong> <%= orders.address.city %></p>
+                <p><strong>State:</strong> <%= orders.address.state %></p>
+                <p><strong>Pin Code:</strong> <%= orders.address.pinCode %></p>
+                <!-- Add more address details as needed -->
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h4>Product Details:</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.items.forEach(item => { %>
+                    <tr>
+                        <td><%= item.product.name %></td>
+                        <td><%= item.quantity %></td>
+                        <td>$<%= item.price %></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Dropdown to change order status -->
+        <div class="mt-4">
+            <h4>Change Order Status:</h4>
+            <form action="/postOrderDetails/<%= orders._id %>" method="post">
+                <div class="form-group">
+                    <label for="orderStatus">Select Status:</label>
+                    <select id="orderStatus" name="orderStatus" class="form-control">
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="refund-initiated">Refund Initiated</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <button type="submit" onclick="return confirm('Save the changes ?');" class="btn btn-primary">Update Status</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

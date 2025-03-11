@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" rel="stylesheet" />
+   <style>
+
+#progressbar-1 {
+color: #455A64;
+}
+
+#progressbar-1 li {
+list-style-type: none;
+font-size: 13px;
+width: 33.33%;
+float: left;
+position: relative;
+}
+
+#progressbar-1 #step1:before {
+content: "1";
+color: #fff;
+width: 29px;
+margin-left: 22px;
+padding-left: 11px;
+}
+
+#progressbar-1 #step2:before {
+content: "2";
+color: #fff;
+width: 29px;
+}
+
+#progressbar-1 #step3:before {
+content: "3";
+color: #fff;
+width: 29px;
+margin-right: 22px;
+text-align: center;
+}
+
+#progressbar-1 li:before {
+line-height: 29px;
+display: block;
+font-size: 12px;
+background: #455A64;
+border-radius: 50%;
+margin: auto;
+}
+
+#progressbar-1 li:after {
+content: '';
+width: 121%;
+height: 2px;
+background: #455A64;
+position: absolute;
+left: 0%;
+right: 0%;
+top: 15px;
+z-index: -1;
+}
+
+#progressbar-1 li:nth-child(2):after {
+left: 50%
+}
+
+#progressbar-1 li:nth-child(1):after {
+left: 25%;
+width: 121%
+}
+
+#progressbar-1 li:nth-child(3):after {
+left: 25%;
+width: 50%;
+}
+
+#progressbar-1 li.active:before,
+#progressbar-1 li.active:after {
+background: #1266f1;
+}
+
+.card-stepper {
+z-index: 0
+}
+
+/* Define CSS classes for different statuses */
+.text-pending {
+    color: orange; /* Change this to your desired color */
+}
+
+.text-confirmed {
+    color: green; /* Change this to your desired color */
+}
+
+.text-shipped {
+    color: blue; /* Change this to your desired color */
+}
+
+.text-delivered {
+    color: purple; /* Change this to your desired color */
+}
+
+.text-refund {
+    color: red; /* Change this to your desired color */
+}
+
+.text-cancelled {
+    color: rgb(255, 0, 0); /* Change this to your desired color */
+}
+   </style>
+</head>
+<body>
+  <section class="vh-100 gradient-custom-2">
+      <div class="container py-5 h-100">
+          <div class="row justify-content-center align-items-center">
+            <% if (orders.length > 0) { %>
+              <% orders.forEach(order => { %>
+              <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card card-stepper" style="border-radius: 16px;">
+                      <div class="card-header p-4">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div>
+                                  <p class="text-muted mb-2"> Order ID <span class="fw-bold text-body"><%= order._id %></span></p>
+                                  <p class="text-muted mb-0"> Place On <span class="fw-bold text-body"><%= order.orderDate.toDateString() %></span> </p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="card-body p-4">
+                        <% order.items.forEach(items=>{ %>
+                          <div class="d-flex flex-row mb-4 pb-2">
+                              <div class="flex-fill">
+                                  <a href="/orderDetails/<%= order._id %>"><h5 class="bold"><%= items.product.name %></h5></a>
+                                  <p class="text-muted"> Qty: <%= items.quantity %> item</p>
+                              </div>
+                              <div>
+                                  <img class="align-self-center img-fluid " alt="product image"
+                                      src="<%= items.product.productImages[3].secure_url %> " width="150px" height="150px" style="object-fit: cover;">
+                              </div>
+                          </div>
+                          <% }) %>
+                          <h4 class="mb-3"> ₹ <%= order.totalAmount %> <span class="small text-muted"> via (<%= order.paymentMethod %> ) </span></h4>
+                          <p class="text-muted">Tracking Status: 
+                            <span class="<%= (() => {
+                                switch (order.status) {
+                                    case 'pending':
+                                        return 'text-pending';
+                                    case 'confirmed':
+                                        return 'text-confirmed';
+                                    case 'shipped':
+                                        return 'text-shipped';
+                                    case 'delivered':
+                                        return 'text-delivered';
+                                    case 'refund initiated':
+                                        return 'text-refund';
+                                    case 'cancelled':
+                                        return 'text-cancelled';
+                                    default:
+                                        return 'text-body';
+                                }
+                            })() %>"><%= order.status %></span>
+                        </p>
+                      </div>
+                      <div class="card-footer p-4">
+                          <div class="d-flex justify-content-between">
+                            <% if (order.status !== 'cancelled' && order.status !== 'refund-initiated'&& order.status !== 'return requested' && order.status !== 'cancel requested'  ) { %>
+                                <% if (order.status === 'delivered') {%>
+                                    <% const currentDate = new Date(); %>
+                                    <% const deliveryDate = new Date(order.deliveryDate); %>
+                                    <% const sevenDaysLater = new Date(deliveryDate); %>
+                                    <% sevenDaysLater.setDate(deliveryDate.getDate() + 7); %>
+                                    <% if (currentDate <= sevenDaysLater) { %>
+                                    <h5 class="fw-normal mb-0">
+                                        <a href="/returnOrder/<%= order._id %>" onclick="return confirm('Are you sure you want to Return <%= order.items[0].product.name  %>');">Return</a>
+                                        </h5>
+                                        <% const remainingDays = Math.ceil((sevenDaysLater - currentDate) / (1000 * 60 * 60 * 24)); %>
+                                        <p class="text-muted">Remaining Days to Return: <%= remainingDays %> days</p>
+                                        <% } %>
+                                    <% }else{ %>
+                                        <h5 class="fw-normal mb-0">
+                                            <a href="/cancelOrder/<%= order._id %>" onclick="return confirm('Are you sure you want to Cancel <%= order.items[0].product.name  %>');">Cancel</a>
+                                            </h5>
+                              <div class="border-start h-100"></div>
+                              <h5 class="fw-normal mb-0"><a href="/orderDetails/<%= order._id %>">Track</a></h5>
+                              <div class="border-start h-100"></div>
+                              <h5 class="fw-normal mb-0"><a href="/generate-invoice/<%= order._id %>">Invoice</a></h5>
+                              <div class="border-start h-100"></div>
+                              <h5 class="fw-normal mb-0"><a href="#!" class="text-muted"><i
+                                          class="fas fa-ellipsis-v"></i></a>
+                              </h5>
+                              <% } %>
+                              <% } %>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <% }); %>
+              <% } else { %>
+                <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div id="lottie-no-orders" class="lottie-container"></div>
+                                <p class="text-muted">No orders found.</p>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+          </div>
+      </div>
+  </section>
+</body>
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.8/lottie.min.js"></script>
+<script>
+  function cancelOrder(orderId) {
+    // Send a PUT request to your server endpoint to cancel the order
+    fetch(`/cancelOrder/${orderId}`, {
+      method: 'PUT',
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the server (e.g., show a success message)
+      alert(data.message);
+      // Optionally, update the status on the page without a full page reload
+      // You can use JavaScript to change the status color or text here
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('An error occurred while cancelling the order.');
+    });
+  }
+
+</script>
+</html>
